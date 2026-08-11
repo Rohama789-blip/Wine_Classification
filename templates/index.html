@@ -1,0 +1,905 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wine Café | Classification</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #efe4d5;
+            color: #3b2118;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        /* TOP BAR */
+
+        .topbar {
+            background: #24140f;
+            color: #d9b77a;
+            padding: 12px 7%;
+            display: flex;
+            justify-content: space-between;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 440px;
+            padding: 75px 20px;
+            text-align: center;
+            color: #fff8ed;
+            background:
+                linear-gradient(rgba(45, 18, 13, .86), rgba(73, 23, 29, .92)),
+                radial-gradient(circle at center, #8b542e, #35150f);
+        }
+
+        .cafe-name {
+            color: #d9b77a;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            letter-spacing: 4px;
+            margin-bottom: 25px;
+        }
+
+        .wine-glass {
+            font-size: 46px;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 64px;
+            font-weight: normal;
+        }
+
+        .hero h1 span {
+            color: #d9b77a;
+            font-style: italic;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 20px auto;
+            color: #e9d9ca;
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+        }
+
+        .hero-line {
+            width: 90px;
+            height: 2px;
+            background: #d9b77a;
+            margin: 28px auto;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 45px;
+            font-family: Arial, sans-serif;
+        }
+
+        .stat strong {
+            display: block;
+            color: #d9b77a;
+            font-size: 25px;
+        }
+
+        .stat small {
+            color: #d8c5b9;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 1050px;
+            margin: -45px auto 0;
+            padding: 0 20px 60px;
+            position: relative;
+        }
+
+        .welcome {
+            background: #fffaf2;
+            padding: 30px 35px;
+            border-radius: 18px 18px 0 0;
+            border-bottom: 1px solid #dfcdb8;
+            box-shadow: 0 15px 35px rgba(52, 27, 18, .10);
+        }
+
+        .welcome-label {
+            color: #8a5739;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .welcome h2 {
+            margin: 8px 0;
+            font-size: 32px;
+            font-weight: normal;
+        }
+
+        .welcome p {
+            color: #806b60;
+            font-family: Arial, sans-serif;
+            margin-bottom: 0;
+        }
+
+        /* FORM */
+
+        .card {
+            background: #fffaf2;
+            padding: 35px;
+            box-shadow: 0 18px 45px rgba(52, 27, 18, .12);
+        }
+
+        .card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .card-title h3 {
+            margin: 0;
+            font-size: 27px;
+            font-weight: normal;
+        }
+
+        .menu-label {
+            color: #9b7342;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 7px;
+        }
+
+        .cafe-badge {
+            width: 65px;
+            height: 65px;
+            border: 2px solid #b18a55;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #702b35;
+            font-size: 27px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #4a3026;
+            font-weight: bold;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px;
+            padding-right: 65px;
+            border: 1px solid #d8c5b0;
+            border-radius: 8px;
+            background: #fdf8ef;
+            color: #3b2118;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #78313a;
+            box-shadow: 0 0 0 3px rgba(120, 49, 58, .08);
+        }
+
+        .input-wrapper span {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9a8174;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+        }
+
+        /* BUTTON */
+
+        .predict-button {
+            width: 100%;
+            margin-top: 30px;
+            padding: 18px;
+            border: none;
+            border-radius: 9px;
+            background: #702b35;
+            color: #fff8ed;
+            font-family: Georgia, serif;
+            font-size: 18px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .predict-button:hover {
+            background: #54202a;
+            transform: translateY(-1px);
+        }
+
+        .predict-button span {
+            color: #d9b77a;
+        }
+
+        /* RESULT */
+
+        .result-card {
+            margin-top: 25px;
+            padding: 35px;
+            text-align: center;
+            border-radius: 12px;
+            background: #35150f;
+            color: #fff8ed;
+            box-shadow: 0 15px 35px rgba(52, 27, 18, .15);
+        }
+
+        .result-label {
+            color: #d9b77a;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 3px;
+        }
+
+        .result-card h2 {
+            font-size: 36px;
+            margin: 12px 0 25px;
+        }
+
+        .confidence-box {
+            max-width: 500px;
+            margin: auto;
+            padding: 16px 20px;
+            background: rgba(255,255,255,.07);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-family: Arial, sans-serif;
+        }
+
+        .confidence-text {
+            text-align: left;
+        }
+
+        .confidence-text small {
+            display: block;
+            color: #cbb8ad;
+            margin-top: 4px;
+        }
+
+        .confidence-box strong {
+            color: #d9b77a;
+            font-size: 22px;
+        }
+
+        .progress {
+            max-width: 500px;
+            height: 6px;
+            margin: 12px auto 0;
+            background: #604139;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: #d9b77a;
+        }
+
+        /* INFORMATION */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .info-card {
+            background: #fffaf2;
+            padding: 27px;
+            border: 1px solid #dfcdb8;
+            border-radius: 12px;
+            box-shadow: 0 8px 22px rgba(52, 27, 18, .07);
+        }
+
+        .info-card .icon {
+            color: #8b5b3d;
+            font-size: 25px;
+        }
+
+        .info-number {
+            color: #b49a82;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-top: 12px;
+        }
+
+        .info-card h3 {
+            margin: 8px 0;
+            font-size: 20px;
+        }
+
+        .info-card p {
+            color: #806b60;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        /* NOTE */
+
+        .note {
+            margin-top: 25px;
+            padding: 20px 25px;
+            background: #e7d7c4;
+            border-left: 4px solid #8a5739;
+            font-family: Arial, sans-serif;
+        }
+
+        .note strong {
+            color: #5b3024;
+        }
+
+        .note p {
+            margin-bottom: 0;
+            color: #755f54;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            background: #24140f;
+            color: #d8c5b9;
+            padding: 40px 20px;
+        }
+
+        footer h3 {
+            color: #d9b77a;
+            font-size: 21px;
+            font-weight: normal;
+        }
+
+        footer p {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+
+        footer small {
+            color: #927d72;
+            font-family: Arial, sans-serif;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .topbar {
+                display: none;
+            }
+
+            .hero {
+                padding: 55px 20px;
+            }
+
+            .hero h1 {
+                font-size: 44px;
+            }
+
+            .stats {
+                gap: 18px;
+            }
+
+            .input-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 22px;
+            }
+
+            .welcome {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+
+    <div class="topbar">
+        <span>THE WINE ROOM</span>
+        <span>CLASSIFICATION • EST. 2026</span>
+    </div>
+
+
+    <header class="hero">
+
+        <div class="cafe-name">
+            ✦ THE WINE ROOM ✦
+        </div>
+
+        <div class="wine-glass">
+            ♡
+        </div>
+
+        <h1>
+            Wine <span>Classification</span>
+        </h1>
+
+        <div class="hero-line"></div>
+
+        <p>
+            Welcome to our little digital wine room.
+            Enter the characteristics of your wine sample
+            and let our machine learning model classify it.
+        </p>
+
+        <div class="stats">
+
+            <div class="stat">
+                <strong>13</strong>
+                <small>Features</small>
+            </div>
+
+            <div class="stat">
+                <strong>3</strong>
+                <small>Classes</small>
+            </div>
+
+            <div class="stat">
+                <strong>97.22%</strong>
+                <small>Accuracy</small>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+
+        <section class="welcome">
+
+            <div class="welcome-label">
+                WINE TASTING ROOM
+            </div>
+
+            <h2>
+                Tell us about your wine
+            </h2>
+
+            <p>
+                Enter the chemical characteristics below to discover
+                which class your wine sample belongs to.
+            </p>
+
+        </section>
+
+
+        <section class="card">
+
+            <div class="card-title">
+
+                <div>
+
+                    <div class="menu-label">
+                        SAMPLE DETAILS
+                    </div>
+
+                    <h3>
+                        Wine Characteristics
+                    </h3>
+
+                </div>
+
+                <div class="cafe-badge">
+                    W
+                </div>
+
+            </div>
+
+
+            <form action="/predict" method="post">
+
+                <div class="input-grid">
+
+
+                    <div class="input-group">
+                        <label>Alcohol</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="alcohol"
+                                   placeholder="14.23"
+                                   required>
+                            <span>%</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Malic Acid</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="malic_acid"
+                                   placeholder="1.71"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Ash</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="ash"
+                                   placeholder="2.43"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Alcalinity of Ash</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="alcalinity_of_ash"
+                                   placeholder="15.6"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Magnesium</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="magnesium"
+                                   placeholder="127"
+                                   required>
+                            <span>mg</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Total Phenols</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="total_phenols"
+                                   placeholder="2.80"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Flavanoids</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="flavanoids"
+                                   placeholder="3.06"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Nonflavanoid Phenols</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="nonflavanoid_phenols"
+                                   placeholder="0.28"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Proanthocyanins</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="proanthocyanins"
+                                   placeholder="2.29"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Color Intensity</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="color_intensity"
+                                   placeholder="5.64"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Hue</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="hue"
+                                   placeholder="1.04"
+                                   required>
+                            <span>value</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>OD280 / OD315</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="od280_od315"
+                                   placeholder="3.92"
+                                   required>
+                            <span>ratio</span>
+                        </div>
+                    </div>
+
+
+                    <div class="input-group">
+                        <label>Proline</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="any"
+                                   name="proline"
+                                   placeholder="1065"
+                                   required>
+                            <span>mg</span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="predict-button">
+
+                    <span>✦</span>
+                    &nbsp; Classify My Wine &nbsp;
+                    <span>→</span>
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        {% if prediction %}
+
+        <section class="result-card">
+
+            <div class="result-label">
+                YOUR WINE HAS BEEN CLASSIFIED
+            </div>
+
+            <h2>
+                {{ prediction }}
+            </h2>
+
+
+            {% if probability is not none %}
+
+            <div class="confidence-box">
+
+                <div class="confidence-text">
+                    <span>Model Confidence</span>
+                    <small>Prediction probability</small>
+                </div>
+
+                <strong id="confidenceValue">
+                    {{ probability }}%
+                </strong>
+
+            </div>
+
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar">
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        {% endif %}
+
+
+        <section class="info-grid">
+
+
+            <div class="info-card">
+
+                <div class="icon">☕</div>
+
+                <div class="info-number">
+                    FEATURE 01
+                </div>
+
+                <h3>
+                    13 Measurements
+                </h3>
+
+                <p>
+                    Thirteen chemical characteristics are
+                    analyzed for every wine sample.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="icon">🍷</div>
+
+                <div class="info-number">
+                    FEATURE 02
+                </div>
+
+                <h3>
+                    Three Classes
+                </h3>
+
+                <p>
+                    The trained model identifies the wine
+                    as belonging to one of three classes.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="icon">✦</div>
+
+                <div class="info-number">
+                    FEATURE 03
+                </div>
+
+                <h3>
+                    97.22% Accuracy
+                </h3>
+
+                <p>
+                    Logistic Regression achieved 97.22%
+                    accuracy on the test dataset.
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+        <div class="note">
+
+            <strong>
+                ☕ A little note from the wine room
+            </strong>
+
+            <p>
+                This application is an educational machine learning
+                project. The prediction represents the output of the
+                trained classification model.
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <footer>
+
+        <h3>
+            ✦ The Wine Room ✦
+        </h3>
+
+        <p>
+            Wine Classification System
+        </p>
+
+        <small>
+            Built with Python • FastAPI • Scikit-learn • Jinja2
+        </small>
+
+    </footer>
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const confidenceElement =
+                    document.getElementById("confidenceValue");
+
+                const progressBar =
+                    document.getElementById("progressBar");
+
+                if (
+                    confidenceElement &&
+                    progressBar
+                ) {
+
+                    let confidence =
+                        parseFloat(
+                            confidenceElement.innerText
+                                .replace("%", "")
+                                .trim()
+                        );
+
+                    if (!isNaN(confidence)) {
+
+                        confidence = Math.min(
+                            Math.max(confidence, 0),
+                            100
+                        );
+
+                        progressBar.style.width =
+                            confidence + "%";
+                    }
+                }
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
+```
